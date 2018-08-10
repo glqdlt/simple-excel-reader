@@ -1,7 +1,6 @@
 package com.glqdlt.utill.simpleReader;
 
 import com.glqdlt.utill.simpleReader.callback.SimpleReaderCallBack;
-import org.apache.poi.ss.usermodel.Row;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,21 +15,21 @@ public class SimpleExcelReaderTest {
     public void read() throws IOException {
         try (InputStream is = new FileInputStream(new File("src/test/resources/test-data.xlsx"))) {
 
-            List<ExcelCellData> result = new SimpleExcelReader().read(is, 3,
-                    new SimpleReaderCallBack<ExcelCellData>() {
-                        @Override
-                        public ExcelCellData exec(Row row) {
+            List<ExcelCellData> result = new SimpleExcelReader()
 
-                            ExcelCellData data = new ExcelCellData();
-                            data.setSeq((int) row.getCell(0).getNumericCellValue());
-                            data.setRegDate(row.getCell(1).getStringCellValue());
-                            data.setRank((int) row.getCell(2).getNumericCellValue());
-                            data.setAuthor(row.getCell(3).getStringCellValue());
-                            data.setTitle(row.getCell(4).getStringCellValue());
+                    .read(
+                            is,
+                            3,
+                                (SimpleReaderCallBack<ExcelCellData>) row -> ExcelCellData
+                                .builder()
 
-                            return data;
-                        }
-                    }
+                                .seq((int) row.getCell(0).getNumericCellValue())
+                                .regDate(row.getCell(1).getStringCellValue())
+                                .rank((int) row.getCell(2).getNumericCellValue())
+                                .author(row.getCell(3).getStringCellValue())
+                                .title(row.getCell(4).getStringCellValue())
+
+                                .build()
             );
 
             for (ExcelCellData e : result) {
