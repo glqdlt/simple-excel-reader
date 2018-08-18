@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 public class SimpleExcelReader {
 
-    public void read(InputStream is, ReaderHandler readerHandler, Integer sheetNum) {
+    public void read(InputStream is, ReaderHandler readerHandler, Integer sheetNum, Integer rowNum) {
 
         try {
             XSSFWorkbook sheets = new XSSFWorkbook(is);
@@ -16,14 +16,18 @@ public class SimpleExcelReader {
             XSSFSheet sheet = sheets.getSheetAt(sheetNum);
 
             for (Row row : sheet) {
-                readerHandler.handler(row);
+                if (row.getRowNum() > rowNum) {
+                    try {
+                        Object object = readerHandler.handler(row);
+                    } catch (NullPointerException e) {
+                        throw new ExcelReaderException(row.getRowNum() + " Row's cell is Null", e, row);
+                    }
+                }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
     }
-
 }
