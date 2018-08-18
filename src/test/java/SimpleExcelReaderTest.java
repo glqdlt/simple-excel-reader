@@ -1,24 +1,20 @@
-import callback.ReaderHandler;
+import callback.ReadWithResultHandler;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import static org.junit.Assert.*;
+import java.util.List;
 
 
 public class SimpleExcelReaderTest {
 
     @Test
-    public void constructed() throws IOException {
+    public void readWithResult() throws IOException {
 
-        ReaderHandler<TestPoiReadObject> readerHandler = (row) -> {
+        ReadWithResultHandler<TestPoiReadObject> readWithResultHandler = (row) -> {
             String author = row.getCell(3).getStringCellValue();
-            String title = row.getCell(6).getStringCellValue();
-
-
+            String title = row.getCell(4).getStringCellValue();
             TestPoiReadObject testPoiReadObject = new TestPoiReadObject();
             testPoiReadObject.setTitle(title);
             testPoiReadObject.setAuthor(author);
@@ -30,7 +26,8 @@ public class SimpleExcelReaderTest {
         try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/test-data.xlsx"))) {
             SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
             try {
-                simpleExcelReader.read(inputStream, readerHandler, 0, 1);
+            List<TestPoiReadObject> ss = (List<TestPoiReadObject>) simpleExcelReader.readAndResultArray(inputStream, readWithResultHandler, 0, 1);
+            ss.forEach(x -> System.out.println(x.getAuthor()));
             } catch (ExcelReaderException e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
