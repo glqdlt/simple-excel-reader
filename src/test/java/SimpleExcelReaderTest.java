@@ -20,9 +20,9 @@ public class SimpleExcelReaderTest {
         };
 
 
-        try(FileInputStream inputStream = new FileInputStream(new File("src/test/resources/test-data.xlsx"))){
-        SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
-            simpleExcelReader.read(inputStream, readerHandler);
+        try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/test-data.xlsx"))) {
+            SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
+            simpleExcelReader.read(inputStream, readerHandler, 0);
 
         }
 
