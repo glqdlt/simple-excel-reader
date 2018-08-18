@@ -6,7 +6,7 @@
 
     <groupId>com.glqdlt</groupId>
     <artifactId>simple-poi-reader</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.1</version>
 
 
     <properties>
