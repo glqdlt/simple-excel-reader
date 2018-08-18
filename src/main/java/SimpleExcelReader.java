@@ -17,13 +17,13 @@ public class SimpleExcelReader {
         return sheet;
     }
 
-    public void consume(InputStream is, ConsumeHandler<?> consumeHandler, Integer sheetNum, Integer rowNum) {
+    public void consume(InputStream is, ConsumeHandler<?> consumeHandler, ExcelReaderOption excelReaderOption) {
 
         try {
-            XSSFSheet sheet = generatedSheet(is, sheetNum);
+            XSSFSheet sheet = generatedSheet(is, excelReaderOption.getSheetNum());
 
             for (Row row : sheet) {
-                if (row.getRowNum() > rowNum) {
+                if (row.getRowNum() > excelReaderOption.getRowNum()) {
                     try {
                         consumeHandler.read(row);
                     } catch (NullPointerException e) {
@@ -38,14 +38,14 @@ public class SimpleExcelReader {
     }
 
 
-    public <T> List<T> readAndResultArray(InputStream is, ReadWithResultHandler<T> readWithResultHandler, Integer sheetNum, Integer rowNum) {
+    public <T> List<T> readAndResultArray(InputStream is, ReadWithResultHandler<T> readWithResultHandler, ExcelReaderOption excelReaderOption) {
 
         List<T> result = new ArrayList<>();
         try {
-            XSSFSheet sheet = generatedSheet(is, sheetNum);
+            XSSFSheet sheet = generatedSheet(is, excelReaderOption.getSheetNum());
 
             for (Row row : sheet) {
-                if (row.getRowNum() > rowNum) {
+                if (row.getRowNum() > excelReaderOption.getRowNum()) {
                     try {
                         T obj = readWithResultHandler.read(row);
                         result.add(obj);
