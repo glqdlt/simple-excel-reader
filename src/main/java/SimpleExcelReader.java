@@ -38,16 +38,16 @@ public class SimpleExcelReader {
     }
 
 
-    public List<?> readAndResultArray(InputStream is, ReadWithResultHandler<?> readWithResultHandler, Integer sheetNum, Integer rowNum) {
+    public <T> List<T> readAndResultArray(InputStream is, ReadWithResultHandler<T> readWithResultHandler, Integer sheetNum, Integer rowNum) {
 
-        List<Object> result = new ArrayList<>();
+        List<T> result = new ArrayList<>();
         try {
             XSSFSheet sheet = generatedSheet(is, sheetNum);
 
             for (Row row : sheet) {
                 if (row.getRowNum() > rowNum) {
                     try {
-                        Object obj = readWithResultHandler.read(row);
+                        T obj = readWithResultHandler.read(row);
                         result.add(obj);
                     } catch (NullPointerException e) {
                         throw new ExcelReaderException(row.getRowNum() + " row's cells is Null !", e, row);
