@@ -37,4 +37,33 @@ public class SimpleExcelReaderTest {
             }
         }
     }
+
+    @Test
+    public void badRead() throws IOException {
+        try (InputStream is = new FileInputStream(new File("src/test/resources/bad-data.xlsx"))) {
+
+            List<ExcelCellData> result = new SimpleExcelReader()
+
+                    .read(
+                            is,
+                            3,
+                            (SimpleReaderCallBack<ExcelCellData>) row -> ExcelCellData
+                                    .builder()
+
+                                    .seq((int) row.getCell(0).getNumericCellValue())
+                                    .regDate(row.getCell(1).getStringCellValue())
+                                    .rank((int) row.getCell(2).getNumericCellValue())
+                                    .author(row.getCell(3).getStringCellValue())
+                                    .title(row.getCell(4).getStringCellValue())
+
+                                    .build()
+                    );
+
+            for (ExcelCellData e : result) {
+                System.out.println(e.getTitle());
+            }
+        }catch(SimpleExcelReaderException e){
+            e.printStackTrace();
+        }
+    }
 }

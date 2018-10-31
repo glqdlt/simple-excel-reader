@@ -29,7 +29,11 @@ public class SimpleExcelReader  {
         for (Row row : firstSheet) {
             i++;
             if (i >= readRowStartCount) {
-                result.add((T) simpleReaderCallBack.exec(row));
+                try {
+                    result.add((T) simpleReaderCallBack.exec(row));
+                }catch(NullPointerException e){
+                    throw  new SimpleExcelReaderException(e,i);
+                }
             }
         }
         return result;
