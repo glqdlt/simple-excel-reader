@@ -1,69 +1,72 @@
 package com.glqdlt.utill.simpleReader;
 
-import com.glqdlt.utill.simpleReader.callback.SimpleReaderCallBack;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class SimpleExcelReaderTest {
 
     @Test
-    public void read() throws IOException {
-        try (InputStream is = new FileInputStream(new File("src/test/resources/test-data.xlsx"))) {
+    public void consumee() throws IOException {
 
-            List<ExcelCellData> result = new SimpleExcelReader()
 
-                    .read(
-                            is,
-                            3,
-                                (SimpleReaderCallBack<ExcelCellData>) row -> ExcelCellData
-                                .builder()
+        try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/test-data.xlsx"))) {
+            SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
+            List<TestPoiReadObject> testPoiReadObjects = new ArrayList<>();
 
-                                .seq((int) row.getCell(0).getNumericCellValue())
-                                .regDate(row.getCell(1).getStringCellValue())
-                                .rank((int) row.getCell(2).getNumericCellValue())
-                                .author(row.getCell(3).getStringCellValue())
-                                .title(row.getCell(4).getStringCellValue())
+            try {
+                simpleExcelReader.consume(inputStream, (row) -> {
+                    if (row.getRowNum() != 5) {
 
-                                .build()
-            );
+                        TestPoiReadObject t = new TestPoiReadObject();
+                        t.setAuthor(row.getCell(3).getStringCellValue());
+                        t.setTitle(row.getCell(4).getStringCellValue());
+                        testPoiReadObjects.add(t);
 
-            for (ExcelCellData e : result) {
-                System.out.println(e.getTitle());
+                    }
+
+                }, ExcelReaderOption.Builder.build(0, 0));
+            } catch (ExcelReaderException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                System.out.println(e.getRow().getRowNum() + " row에서 의 문제가 발생");
             }
+            testPoiReadObjects.forEach(x -> System.out.println(x.getTitle()));
+            Assert.assertEquals("title", testPoiReadObjects.get(0).getTitle());
         }
     }
 
     @Test
-    public void badRead() throws IOException {
-        try (InputStream is = new FileInputStream(new File("src/test/resources/bad-data.xlsx"))) {
+    public void readWithResult() throws IOException {
 
-            List<ExcelCellData> result = new SimpleExcelReader()
+        try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/bad-data.xlsx"))) {
+            SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
+            try {
+                List<TestPoiReadObject> testPoiReadObjects = simpleExcelReader.readAndResultArray(inputStream,
+                        (row) -> {
+                            String author = row.getCell(3).getStringCellValue();
+                            String title = row.getCell(4).getStringCellValue();
+                            TestPoiReadObject testPoiReadObject = new TestPoiReadObject();
+                            testPoiReadObject.setTitle(title);
+                            testPoiReadObject.setAuthor(author);
+                            return testPoiReadObject;
 
-                    .read(
-                            is,
-                            3,
-                            (SimpleReaderCallBack<ExcelCellData>) row -> ExcelCellData
-                                    .builder()
-
-                                    .seq((int) row.getCell(0).getNumericCellValue())
-                                    .regDate(row.getCell(1).getStringCellValue())
-                                    .rank((int) row.getCell(2).getNumericCellValue())
-                                    .author(row.getCell(3).getStringCellValue())
-                                    .title(row.getCell(4).getStringCellValue())
-
-                                    .build()
-                    );
-
-            for (ExcelCellData e : result) {
-                System.out.println(e.getTitle());
+                        },
+                        ExcelReaderOption.Builder.build(2, 0));
+                testPoiReadObjects.forEach(x -> System.out.println(x.getTitle()));
+                Assert.assertEquals("title1", testPoiReadObjects.get(0).getTitle());
+            } catch (ExcelReaderException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                System.out.println(e.getRow().getRowNum() + " row에서 의 문제가 발생");
             }
-        }catch(SimpleExcelReaderException e){
-            e.printStackTrace();
         }
+
     }
 }

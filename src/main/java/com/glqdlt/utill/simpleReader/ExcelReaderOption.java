@@ -1,8 +1,6 @@
+package com.glqdlt.utill.simpleReader;
+
 public class ExcelReaderOption {
-
-    private ExcelReaderOption() {
-
-    }
 
     private ExcelReaderOption(Integer rowNum, Integer sheetNum) {
         this.rowNum = rowNum;
@@ -20,8 +18,6 @@ public class ExcelReaderOption {
 
     private Integer rowNum;
     private Integer sheetNum;
-
-
 
 
     public static class Builder{

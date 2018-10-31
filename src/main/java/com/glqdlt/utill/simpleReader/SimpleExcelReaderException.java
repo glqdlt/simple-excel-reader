@@ -1,23 +1,25 @@
 package com.glqdlt.utill.simpleReader;
 
+import org.apache.poi.ss.usermodel.Row;
+
 public class SimpleExcelReaderException extends RuntimeException {
 
-    private int rowNum;
+    private Row row;
     private String errorMessage;
 
     public String getErrorMessage() {
         return errorMessage;
     }
 
-    public int getRowNum() {
-        return rowNum;
+    public Row getRow() {
+        return row;
     }
 
 
-    public SimpleExcelReaderException(Throwable throwable, int rowNum) {
-        super("Problem on row "+rowNum, throwable);
+    public SimpleExcelReaderException(Throwable throwable, Row row) {
+        super("Problem on row "+row.getRowNum(), throwable);
         this.errorMessage = throwable.getMessage();
-        this.rowNum = rowNum;
+        this.row = row;
     }
 
 }
