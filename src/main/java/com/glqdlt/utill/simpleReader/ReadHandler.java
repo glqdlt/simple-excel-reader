@@ -3,6 +3,6 @@ package com.glqdlt.utill.simpleReader;
 import org.apache.poi.ss.usermodel.Row;
 
 @FunctionalInterface
-public interface ReadWithResultHandler<T> {
+public interface ReadHandler<T> {
     T read(Row row);
 }

@@ -17,7 +17,7 @@ public class SimpleExcelReader {
         return sheet;
     }
 
-    public void consume(InputStream is, ConsumeHandler<?> consumeHandler, ExcelReaderOption options) {
+    public void consume(InputStream is, ConsumeHandler handler, ExcelReaderOption options) {
 
         try {
             XSSFSheet sheet = generatedSheet(is, options.getSheetNum());
@@ -25,7 +25,7 @@ public class SimpleExcelReader {
             for (Row row : sheet) {
                 if (row.getRowNum() > options.getRowNum()) {
                     try {
-                        consumeHandler.read(row);
+                        handler.consume(row);
                     } catch (NullPointerException e) {
                         throw new SimpleExcelReaderException(e, row);
                     }
@@ -38,7 +38,7 @@ public class SimpleExcelReader {
     }
 
 
-    public <T> List<T> readAndResultArray(InputStream is, ReadWithResultHandler<T> readWithResultHandler, ExcelReaderOption options) {
+    public <T> List<T> read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
 
         List<T> result = new ArrayList<>();
         try {
@@ -47,7 +47,7 @@ public class SimpleExcelReader {
             for (Row row : sheet) {
                 if (row.getRowNum() >= options.getRowNum()) {
                     try {
-                        T obj = readWithResultHandler.read(row);
+                        T obj = handler.read(row);
                         result.add(obj);
                     } catch (NullPointerException e) {
                         throw new SimpleExcelReaderException(e, row);

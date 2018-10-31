@@ -42,13 +42,13 @@ public class SimpleExcelReaderTest {
         }
     }
 
-    @Test
+    @Test(expected = SimpleExcelReaderException.class)
     public void readWithResult() throws IOException {
 
         try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/bad-data.xlsx"))) {
             SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
             try {
-                List<TestPoiReadObject> testPoiReadObjects = simpleExcelReader.readAndResultArray(inputStream,
+                List<TestPoiReadObject> testPoiReadObjects = simpleExcelReader.read(inputStream,
                         (row) -> {
                             String author = row.getCell(3).getStringCellValue();
                             String title = row.getCell(4).getStringCellValue();
