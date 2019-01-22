@@ -37,7 +37,32 @@ public class SimpleExcelReader {
         }
     }
 
+    public <T> List<ReadResult> readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
 
+        List<ReadResult> result = new ArrayList<>();
+        try {
+            XSSFSheet sheet = generatedSheet(is, options.getSheetNum());
+
+            for (Row row : sheet) {
+                if (row.getRowNum() >= options.getRowNum()) {
+                    try {
+                        ReadResult obj = handler.read(row);
+                        result.add(obj);
+                    } catch (NullPointerException e) {
+                        throw new SimpleExcelReaderException(e, row);
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+
+    }
+
+
+    @Deprecated
     public <T> List<T> read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
 
         List<T> result = new ArrayList<>();
