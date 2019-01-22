@@ -20,6 +20,7 @@ public class ReadResult<T> {
 
     private boolean passed;
     private T item;
+    private int rowNum;
 
 
 }
