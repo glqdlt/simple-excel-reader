@@ -48,5 +48,24 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snap</id>
+            <url>http://172.28.89.96:18081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>rel</id>
+            <url>http://172.28.89.96:18081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
+
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>web-team-public</name>
+            <url>http://172.28.89.96:18081/repository/maven-public/</url>
+        </repository>
+    </repositories>
 
 </project>
