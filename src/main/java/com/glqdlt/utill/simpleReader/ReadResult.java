@@ -20,6 +20,15 @@ public class ReadResult<T> {
 
     private boolean passed;
     private T item;
+
+    public int getRowNum() {
+        return rowNum;
+    }
+
+    public void setRowNum(int rowNum) {
+        this.rowNum = rowNum;
+    }
+
     private int rowNum;
 
 
