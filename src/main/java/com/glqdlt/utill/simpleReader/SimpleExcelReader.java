@@ -71,12 +71,8 @@ public class SimpleExcelReader {
 
             for (Row row : sheet) {
                 if (row.getRowNum() >= options.getRowNum()) {
-                    try {
                         T obj = handler.read(row);
                         result.add(obj);
-                    } catch (RuntimeException e) {
-                        throw new SimpleExcelReaderException(e, row);
-                    }
                 }
             }
 
