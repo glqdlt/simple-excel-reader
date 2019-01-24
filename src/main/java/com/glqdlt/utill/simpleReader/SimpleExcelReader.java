@@ -37,6 +37,7 @@ public class SimpleExcelReader {
         }
     }
 
+    @Deprecated
     public <T> List<ReadResult> readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
 
         List<ReadResult> result = new ArrayList<>();
@@ -62,7 +63,6 @@ public class SimpleExcelReader {
     }
 
 
-    @Deprecated
     public <T> List<T> read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
 
         List<T> result = new ArrayList<>();
@@ -74,7 +74,7 @@ public class SimpleExcelReader {
                     try {
                         T obj = handler.read(row);
                         result.add(obj);
-                    } catch (NullPointerException e) {
+                    } catch (RuntimeException e) {
                         throw new SimpleExcelReaderException(e, row);
                     }
                 }
