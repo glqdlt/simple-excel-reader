@@ -15,9 +15,8 @@ public class SimpleExcelReaderException extends RuntimeException {
         return row;
     }
 
-
     public SimpleExcelReaderException(Throwable throwable, Row row) {
-        super("Problem on row "+row.getRowNum(), throwable);
+        super(String.format("Problem on row number : %s", row.getRowNum()), throwable);
         this.errorMessage = throwable.getMessage();
         this.row = row;
     }

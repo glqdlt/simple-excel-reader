@@ -35,14 +35,14 @@ public class SimpleExcelReaderTest {
             } catch (ExcelReaderException e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
-                System.out.println(e.getRow().getRowNum() + " row에서 의 문제가 발생");
+                System.out.println(String.format("%s row 에서 의 문제가 발생", e.getRow().getRowNum()));
             }
             testPoiReadObjects.forEach(x -> System.out.println(x.getTitle()));
             Assert.assertEquals("title", testPoiReadObjects.get(0).getTitle());
         }
     }
 
-    @Test(expected = SimpleExcelReaderException.class)
+    @Test(expected = RuntimeException.class)
     public void readWithResult() throws IOException {
 
         try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/bad-data.xlsx"))) {
@@ -64,7 +64,7 @@ public class SimpleExcelReaderTest {
             } catch (ExcelReaderException e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
-                System.out.println(e.getRow().getRowNum() + " row에서 의 문제가 발생");
+                System.out.println(String.format("%s row에서 의 문제가 발생", e.getRow().getRowNum()));
             }
         }
 
