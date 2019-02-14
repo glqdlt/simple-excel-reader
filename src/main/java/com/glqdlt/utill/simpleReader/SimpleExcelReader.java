@@ -1,11 +1,13 @@
 package com.glqdlt.utill.simpleReader;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,16 @@ public class SimpleExcelReader {
         XSSFWorkbook sheets = new XSSFWorkbook(is);
         XSSFSheet sheet = sheets.getSheetAt(sheetNum);
         return sheet;
+    }
+
+    public void create(OutputStream outputStream, ObjectMappingHandler objecMappingHandler) {
+        Workbook wb = new XSSFWorkbook();
+        Workbook rr = objecMappingHandler.mapping(wb);
+        try {
+            rr.write(outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException("Excel Created Fail");
+        }
     }
 
     public void consume(InputStream is, ConsumeHandler handler, ExcelReaderOption options) {
@@ -38,7 +50,8 @@ public class SimpleExcelReader {
     }
 
     @Deprecated
-    public <T> List<ReadResult> readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
+    public <
+            T> List<ReadResult> readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
 
         List<ReadResult> result = new ArrayList<>();
         try {
@@ -71,8 +84,8 @@ public class SimpleExcelReader {
 
             for (Row row : sheet) {
                 if (row.getRowNum() >= options.getRowNum()) {
-                        T obj = handler.read(row);
-                        result.add(obj);
+                    T obj = handler.read(row);
+                    result.add(obj);
                 }
             }
 
