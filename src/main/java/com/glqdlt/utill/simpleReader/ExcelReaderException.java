@@ -1,7 +1,9 @@
 package com.glqdlt.utill.simpleReader;
 
 import org.apache.poi.ss.usermodel.Row;
-
+/**
+ * @author Jhun
+ */
 public class ExcelReaderException extends RuntimeException {
 
     private Row row;

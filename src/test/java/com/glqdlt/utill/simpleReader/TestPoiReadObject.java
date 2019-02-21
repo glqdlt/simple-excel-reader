@@ -1,5 +1,7 @@
 package com.glqdlt.utill.simpleReader;
-
+/**
+ * @author Jhun
+ */
 public class TestPoiReadObject {
 
     private String author;

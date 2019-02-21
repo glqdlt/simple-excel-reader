@@ -44,47 +44,6 @@ public class SimpleExcelReaderTest {
         private Date second;
     }
 
-    @Test
-    public void create_() {
-        SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
-        Path path = Paths.get("tmp.xls");
-        List<SomeObject> dummy = IntStream.rangeClosed(0, 100)
-                .boxed()
-                .map(x -> {
-                    SomeObject someObject = new SomeObject();
-                    someObject.setFirst(x + "____");
-                    someObject.setSecond(new Date());
-                    return someObject;
-                })
-                .collect(Collectors.toList());
-        try (OutputStream dd = Files.newOutputStream(path, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.DELETE_ON_CLOSE)) {
-            simpleExcelReader.create(dd, (x) -> {
-                Sheet qq = x.createSheet();
-                Row header = qq.createRow(0);
-
-                Cell h_f = header.createCell(0);
-                h_f.setCellValue("첫번째");
-
-                Cell h_f_2 = header.createCell(1);
-                h_f_2.setCellValue("두번째");
-
-                int i = 1;
-                for (SomeObject o : dummy) {
-                    Row s = qq.createRow(i);
-
-                    Cell s_f = s.createCell(0);
-                    s_f.setCellValue(o.getFirst());
-
-                    Cell s_f_2 = s.createCell(1);
-                    s_f_2.setCellValue(o.getSecond());
-                    i++;
-                }
-                return x;
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void consumee() throws IOException {

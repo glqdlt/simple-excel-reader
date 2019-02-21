@@ -1,5 +1,7 @@
 package com.glqdlt.utill.simpleReader;
-
+/**
+ * @author Jhun
+ */
 public class ExcelReaderOption {
 
     private ExcelReaderOption(Integer rowNum, Integer sheetNum) {

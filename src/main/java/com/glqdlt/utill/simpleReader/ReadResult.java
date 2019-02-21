@@ -1,6 +1,8 @@
 package com.glqdlt.utill.simpleReader;
 
-
+/**
+ * @author Jhun
+ */
 public class ReadResult<T> {
     public boolean isPassed() {
         return passed;
