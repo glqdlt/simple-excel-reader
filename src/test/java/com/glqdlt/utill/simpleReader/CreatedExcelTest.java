@@ -1,13 +1,20 @@
 package com.glqdlt.utill.simpleReader;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Jhun
  * 2019-02-21
  */
+@Ignore
 public class CreatedExcelTest {
 
     public static class SomeObject {
@@ -44,9 +51,18 @@ public class CreatedExcelTest {
     }
 
     @Test
-    public void excelCreate() {
+    public void excelCreate() throws IOException {
 
+        SomeObject someObject = new SomeObject();
+        someObject.setDate(DateUtils.asDate(LocalDate.of(2018, 1, 1)));
+        someObject.setInteger(99);
+        someObject.setString("헬로우");
 
+        List<SomeObject> data = Collections.singletonList(someObject);
+
+        File excel = new File(System.getProperty("user.home") + File.separator + "testExcel.xlsx");
+        SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
+        simpleExcelReader.create(excel, data);
 
     }
 }
