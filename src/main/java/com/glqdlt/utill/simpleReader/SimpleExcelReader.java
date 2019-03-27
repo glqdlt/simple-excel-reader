@@ -244,6 +244,7 @@ public final class SimpleExcelReader {
                         ReadResult obj = handler.read(row);
                         result.add(obj);
                     } catch (NullPointerException e) {
+                        e.printStackTrace();
                         throw new SimpleExcelReaderException(e, row);
                     }
                 }
@@ -266,6 +267,7 @@ public final class SimpleExcelReader {
                     return _read(inputStreamReader, handler, options);
                 }
             } catch (IOException e) {
+                e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }
 
