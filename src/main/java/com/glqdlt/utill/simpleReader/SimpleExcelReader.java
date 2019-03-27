@@ -12,18 +12,20 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * @author Jhun
  */
-public class SimpleExcelReader {
+public final class SimpleExcelReader {
     private <T> Workbook mappingToObjectInnerWorkbook(List<T> list, Workbook workbook) {
         Sheet sheet = workbook.createSheet();
 
@@ -213,6 +215,25 @@ public class SimpleExcelReader {
     @Deprecated
     public <T> List<ReadResult> readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
 
+        if (options.isSave()) {
+            File f = new File(options.getPath());
+            try {
+                Files.copy(is, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                try (InputStream inputStreamReader = new FileInputStream(f)) {
+                    return _readMatch(inputStreamReader, handler, options);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+
+        } else {
+            return _readMatch(is, handler, options);
+        }
+
+    }
+
+    private <T> List<ReadResult> _readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
+
         List<ReadResult> result = new ArrayList<>();
         try {
             XSSFSheet sheet = getSheet(is, options.getSheetNum());
@@ -228,9 +249,6 @@ public class SimpleExcelReader {
                 }
             }
 
-            if (options.isSave()) {
-                create(new File(options.getPath()), result);
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -239,9 +257,25 @@ public class SimpleExcelReader {
 
     }
 
-
     public <T> List<T> read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
+        if (options.isSave()) {
+            File f = new File(options.getPath());
+            try {
+                Files.copy(is, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                try (InputStream inputStreamReader = new FileInputStream(f)) {
+                    return _read(inputStreamReader, handler, options);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
 
+        } else {
+            return _read(is, handler, options);
+        }
+    }
+
+
+    private <T> List<T> _read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
         List<T> result = new ArrayList<>();
         try {
             XSSFSheet sheet = getSheet(is, options.getSheetNum());
@@ -253,15 +287,12 @@ public class SimpleExcelReader {
                 }
             }
 
-            if (options.isSave()) {
-                create(new File(options.getPath()), result);
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return result;
-
     }
+
 }
