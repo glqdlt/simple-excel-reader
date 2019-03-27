@@ -7,22 +7,19 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 /**
  * @author Jhun
  */
@@ -231,6 +228,10 @@ public class SimpleExcelReader {
                 }
             }
 
+            if (options.isSave()) {
+                create(new File(options.getPath()), result);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -252,9 +253,14 @@ public class SimpleExcelReader {
                 }
             }
 
+            if (options.isSave()) {
+                create(new File(options.getPath()), result);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return result;
 
     }
