@@ -1,11 +1,14 @@
 package com.glqdlt.utill.simpleReader;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -26,6 +29,8 @@ import java.util.stream.Stream;
  * @author Jhun
  */
 public final class SimpleExcelReader {
+    Logger log = LoggerFactory.getLogger(SimpleExcelReader.class);
+
     private <T> Workbook mappingToObjectInnerWorkbook(List<T> list, Workbook workbook) {
         Sheet sheet = workbook.createSheet();
 
@@ -166,7 +171,7 @@ public final class SimpleExcelReader {
                     }
 
                 } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -208,28 +213,27 @@ public final class SimpleExcelReader {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
     @Deprecated
     public <T> List<ReadResult> readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
-
         if (options.isSave()) {
-            File f = new File(options.getPath());
             try {
-                Files.copy(is, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                try (InputStream inputStreamReader = new FileInputStream(f)) {
-                    return _readMatch(inputStreamReader, handler, options);
+                File f = new File(options.getPath());
+                FileUtils.copyInputStreamToFile(is, f);
+                log.debug("Archiving File Done. ==> {}", f.getAbsolutePath());
+                try (FileInputStream inputStream = new FileInputStream(f)) {
+                    return _readMatch(inputStream, handler, options);
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e.getMessage());
+                log.error(e.getMessage(), e);
+                throw new RuntimeException("Excel Archving Fail");
             }
-
         } else {
             return _readMatch(is, handler, options);
         }
-
     }
 
     private <T> List<ReadResult> _readMatch(InputStream is, ReadMatchHandler<T> handler, ExcelReaderOption options) {
@@ -244,7 +248,7 @@ public final class SimpleExcelReader {
                         ReadResult obj = handler.read(row);
                         result.add(obj);
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                         throw new SimpleExcelReaderException(e, row);
                     }
                 }
@@ -252,7 +256,7 @@ public final class SimpleExcelReader {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return result;
 
@@ -260,17 +264,17 @@ public final class SimpleExcelReader {
 
     public <T> List<T> read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
         if (options.isSave()) {
-            File f = new File(options.getPath());
             try {
-                Files.copy(is, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                try (InputStream inputStreamReader = new FileInputStream(f)) {
-                    return _read(inputStreamReader, handler, options);
+                File f = new File(options.getPath());
+                FileUtils.copyInputStreamToFile(is, f);
+                log.debug("Archiving File Done. ==> {}", f.getAbsolutePath());
+                try (FileInputStream inputStream = new FileInputStream(f)) {
+                    return _read(inputStream, handler, options);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
+                log.error(e.getMessage(), e);
+                throw new RuntimeException("Excel Archving Fail");
             }
-
         } else {
             return _read(is, handler, options);
         }
@@ -291,7 +295,7 @@ public final class SimpleExcelReader {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         return result;

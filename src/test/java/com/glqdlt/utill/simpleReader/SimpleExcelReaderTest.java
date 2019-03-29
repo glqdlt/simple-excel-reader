@@ -96,7 +96,7 @@ public class SimpleExcelReaderTest {
 
     @Test
     public void 읽고저장까지() {
-        final String path = System.getProperty("user.dir") + File.separator + "temp.xlsx";
+        final String path = System.getProperty("user.dir") + File.separator + "temp11.xlsx";
 
         try (FileInputStream inputStream = new FileInputStream(new File("src/test/resources/test-data.xlsx"))) {
             SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
@@ -125,6 +125,12 @@ public class SimpleExcelReaderTest {
         }
 
         File f = new File(path);
-        f.delete();
+
+        if(f.exists()){
+            f.delete();
+        }else{
+            Assert.fail("Not Created Excel Archive File");
+        }
+
     }
 }
