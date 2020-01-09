@@ -1,5 +1,6 @@
 package com.glqdlt.utill.simpleReader;
 
+import com.glqdlt.utill.simpleReader.annotation.ExcelColumnOption;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -34,27 +35,16 @@ public class CreatedExcelTest {
             this.integer = integer;
         }
 
-        public Date pullDate() {
-            return date;
-        }
-
-        public void setDate(Date date) {
-            this.date = date;
-        }
-
-        @SimpleReaderOption(customColumnName = "스트링컬럼")
+        @ExcelColumnOption(columnName = "스트링컬럼")
         private String string;
-        @SimpleReaderOption(customColumnName = "인트컬럼")
+        @ExcelColumnOption(columnName = "인트컬럼")
         private Integer integer;
-        @SimpleReaderOption(getMethodPrefix = "pull")
-        private Date date;
     }
 
     @Test
     public void excelCreate() throws IOException {
 
         SomeObject someObject = new SomeObject();
-        someObject.setDate(DateUtils.asDate(LocalDate.of(2018, 1, 1)));
         someObject.setInteger(99);
         someObject.setString("헬로우");
 
