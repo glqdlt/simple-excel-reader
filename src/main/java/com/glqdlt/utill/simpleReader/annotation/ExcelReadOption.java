@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface ExcelColumnIgnore {
+public @interface ExcelReadOption {
+    boolean ignore() default false;
 }

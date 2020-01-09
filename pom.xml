@@ -6,7 +6,7 @@
 
     <groupId>com.glqdlt.utill</groupId>
     <artifactId>simple-poi-reader</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.1-SNAPSHOT</version>
 
 
     <properties>
@@ -24,6 +24,30 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -76,13 +100,5 @@
         </repository>
     </distributionManagement>
 
-
-    <repositories>
-        <repository>
-            <id>public</id>
-            <name>web-team-public</name>
-            <url>http://172.28.89.96:18081/repository/maven-public/</url>
-        </repository>
-    </repositories>
 
 </project>

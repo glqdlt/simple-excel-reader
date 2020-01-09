@@ -1,14 +1,16 @@
 package com.glqdlt.utill.simpleReader;
 
-import com.glqdlt.utill.simpleReader.annotation.ExcelColumnOption;
+import com.glqdlt.utill.simpleReader.annotation.ExcelMakeOption;
+import com.glqdlt.utill.simpleReader.config.ArchiveConfig;
+import com.glqdlt.utill.simpleReader.config.ArchiveOption;
+import com.glqdlt.utill.simpleReader.config.ExcelArchiveFileStrategys;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,9 +37,9 @@ public class CreatedExcelTest {
             this.integer = integer;
         }
 
-        @ExcelColumnOption(columnName = "스트링컬럼")
+        @ExcelMakeOption(customColumnName = "스트링컬럼")
         private String string;
-        @ExcelColumnOption(columnName = "인트컬럼")
+        @ExcelMakeOption(customColumnName = "인트컬럼")
         private Integer integer;
     }
 
@@ -51,8 +53,13 @@ public class CreatedExcelTest {
         List<SomeObject> data = Collections.singletonList(someObject);
 
         File excel = new File(System.getProperty("user.home") + File.separator + "testExcel.xlsx");
-        SimpleExcelReader simpleExcelReader = new SimpleExcelReader();
-        simpleExcelReader.create(excel, data);
-
+        ArchiveConfig archiveConfig = new ArchiveConfig();
+        archiveConfig.setMakeOption(new ArchiveOption(false, ExcelArchiveFileStrategys.SIMPLE_ARCHIVE_STRAEGY));
+        archiveConfig.setReadOption(new ArchiveOption(false, ExcelArchiveFileStrategys.SIMPLE_ARCHIVE_STRAEGY));
+        SimpleArchiveExcelReader simpleArchiveExcelReader = new SimpleArchiveExcelReader(archiveConfig);
+        File aaa = simpleArchiveExcelReader.make(excel, data, SomeObject.class);
+        Assert.assertTrue(aaa.exists());
+        Assert.assertEquals(aaa.getAbsolutePath(), excel.getAbsolutePath());
+        aaa.deleteOnExit();
     }
 }

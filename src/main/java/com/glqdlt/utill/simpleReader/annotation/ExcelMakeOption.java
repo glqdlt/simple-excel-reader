@@ -7,15 +7,14 @@ import java.lang.annotation.Target;
 
 /**
  * @author Jhun
- * 2019-02-19
+ * 2020-01-22
  */
-@Target(value = ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExcelColumnOption {
-//    String[] customGetMethodPrefix() default {};
+@Target({ElementType.FIELD})
+public @interface ExcelMakeOption {
+    String customColumnName() default "";
 
-    String columnName() default "";
+    String customGetMethodPrefix() default "";
 
-    int columnOrder() default 0;
-
+    boolean ignore() default false;
 }

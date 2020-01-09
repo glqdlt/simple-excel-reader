@@ -1,5 +1,9 @@
 package com.glqdlt.utill.simpleReader.config;
 
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author Jhun
  * 2020-01-09
@@ -7,6 +11,7 @@ package com.glqdlt.utill.simpleReader.config;
 public class ArchiveConfig {
     private ArchiveOption readOption;
     private ArchiveOption makeOption;
+    private final List<DateTimeFormatter> dateTimeParser = new LinkedList<>();
 
     public ArchiveOption getReadOption() {
         return readOption;
@@ -22,5 +27,13 @@ public class ArchiveConfig {
 
     public void setMakeOption(ArchiveOption makeOption) {
         this.makeOption = makeOption;
+    }
+
+    public void addDateTimeFormat(DateTimeFormatter formatter) {
+        this.dateTimeParser.add(formatter);
+    }
+
+    public List<DateTimeFormatter> getDateTimeParser() {
+        return dateTimeParser;
     }
 }

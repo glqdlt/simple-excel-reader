@@ -252,6 +252,7 @@ public final class SimpleExcelReader {
 
     }
 
+    @Deprecated
     public <T> List<T> read(InputStream is, ReadHandler<T> handler, ExcelReaderOption options) {
         if (options.isSave()) {
             try {
